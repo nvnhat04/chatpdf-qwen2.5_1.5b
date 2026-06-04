@@ -1,0 +1,53 @@
+# Configuration file for PDF Chatbot
+
+[paths]
+# Đường dẫn tới PDF
+pdf_path = docs/file.pdf
+
+# Đường dẫn tới model
+model_path = models\\qwen2.5-1.5b
+
+# Đường dẫn lưu embeddings cache
+embeddings_dir = chatbot_uet/embeddings
+
+# Lưu chat history
+save_history = true
+history_file = chatbot_uet/chat_history.json
+
+[chunking]
+# Kích thước mỗi chunk (tokens)
+chunk_size = 500
+
+# Overlap giữa chunks
+chunk_overlap = 100
+
+[retrieval]
+# Số documents trả lại
+top_k = 5
+
+# Ngưỡng similarity score (0-1)
+similarity_threshold = 0.3
+
+[generation]
+# Số tokens tối đa tạo ra
+max_new_tokens = 512
+
+# Temperature (0.0 = deterministic, 1.0 = creative)
+temperature = 0.7
+
+# Top-p sampling
+top_p = 0.9
+
+[embedding]
+# Model embedding
+embedding_model = sentence-transformers/all-MiniLM-L6-v2
+
+# Batch size khi encoding
+batch_size = 32
+
+[performance]
+# Dùng GPU nếu có sẵn
+use_gpu = true
+
+# Data type (float32 hoặc float16 - float16 tiết kiệm memory)
+torch_dtype = float16
