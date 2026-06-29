@@ -49,11 +49,28 @@
   color: var(--text-primary);
 }
 
-.mobileStatus {
-  width: 36px;
+.mobileActions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  gap: 10px;
+}
+
+.themeBtn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-normal);
+  border-radius: 9px;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.themeBtn:hover {
+  background: var(--bg-hover);
+  color: var(--accent-primary);
 }
 
 .statusDot {

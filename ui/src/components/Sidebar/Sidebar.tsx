@@ -14,6 +14,8 @@ interface SidebarProps {
   onNewChat: () => void;
   isMobileOpen: boolean;
   onCloseMobile: () => void;
+  theme: 'dark' | 'light';
+  onToggleTheme: () => void;
 }
 
 const SUGGESTED_QUESTIONS = [
@@ -32,6 +34,8 @@ export default function Sidebar({
   onNewChat,
   isMobileOpen,
   onCloseMobile,
+  theme,
+  onToggleTheme,
 }: SidebarProps) {
   return (
     <>
@@ -42,17 +46,27 @@ export default function Sidebar({
 
       <aside className={`${styles.sidebar} ${isMobileOpen ? styles.mobileOpen : ''}`}>
         {/* Logo */}
-        <div className={styles.logo}>
-          <div className={styles.logoIcon}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+        <div className={styles.logoRow}>
+          <div className={styles.logo}>
+            <div className={styles.logoIcon}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <h1 className={styles.logoTitle}>ChatPDF</h1>
+              <p className={styles.logoSub}>nvnhat04</p>
+            </div>
           </div>
-          <div>
-            <h1 className={styles.logoTitle}>ChatPDF</h1>
-            <p className={styles.logoSub}>UET · Qwen2.5-1.5B</p>
-          </div>
+          <button
+            className={styles.themeToggle}
+            onClick={onToggleTheme}
+            aria-label={theme === 'dark' ? 'Bật giao diện sáng' : 'Bật giao diện tối'}
+            title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+          >
+            {theme === 'dark' ? '☀' : '☾'}
+          </button>
         </div>
 
         {/* New chat button */}

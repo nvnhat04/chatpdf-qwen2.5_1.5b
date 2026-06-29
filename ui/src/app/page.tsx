@@ -10,12 +10,35 @@ import ChatInput from '@/components/ChatInput/ChatInput';
 import styles from './page.module.css';
 
 export default function Home() {
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [currentSession, setCurrentSession] = useState<PDFSession | null>(null);
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [isCheckingHealth, setIsCheckingHealth] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('chatpdf-theme');
+    const initialTheme =
+      savedTheme === 'light' || savedTheme === 'dark'
+        ? savedTheme
+        : window.matchMedia('(prefers-color-scheme: light)').matches
+          ? 'light'
+          : 'dark';
+    document.documentElement.dataset.theme = initialTheme;
+    const frame = requestAnimationFrame(() => setTheme(initialTheme));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme((currentTheme) => {
+      const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = nextTheme;
+      localStorage.setItem('chatpdf-theme', nextTheme);
+      return nextTheme;
+    });
+  };
 
   // Health check on mount and periodically
   const checkHealth = useCallback(async () => {
@@ -30,21 +53,13 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    checkHealth();
+    const initialCheck = window.setTimeout(checkHealth, 0);
     const interval = setInterval(checkHealth, 30000);
-    return () => clearInterval(interval);
-  }, [checkHealth]);
-
-  // Listen for suggested questions from sidebar
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const question = (e as CustomEvent<string>).detail;
-      handleSendMessage(question);
+    return () => {
+      clearTimeout(initialCheck);
+      clearInterval(interval);
     };
-    window.addEventListener('suggested-question', handler);
-    return () => window.removeEventListener('suggested-question', handler);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentSession, isLoading]);
+  }, [checkHealth]);
 
   const handleSendMessage = async (text: string) => {
     if (!text.trim() || isLoading || !currentSession) return;
@@ -91,6 +106,17 @@ export default function Home() {
     }
   };
 
+  // Listen for suggested questions from sidebar
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const question = (e as CustomEvent<string>).detail;
+      handleSendMessage(question);
+    };
+    window.addEventListener('suggested-question', handler);
+    return () => window.removeEventListener('suggested-question', handler);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSession, isLoading]);
+
   const handleNewChat = () => {
     setMessages([]);
     setIsMobileSidebarOpen(false);
@@ -117,6 +143,8 @@ export default function Home() {
         onNewChat={handleNewChat}
         isMobileOpen={isMobileSidebarOpen}
         onCloseMobile={() => setIsMobileSidebarOpen(false)}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
       <main className={styles.main}>
@@ -134,8 +162,16 @@ export default function Home() {
               <line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
             </svg>
           </button>
-          <span className={styles.mobileTitle}>ChatPDF · UET</span>
-          <div className={styles.mobileStatus}>
+          <span className={styles.mobileTitle}>ChatPDF · nvnhat04</span>
+          <div className={styles.mobileActions}>
+            <button
+              className={styles.themeBtn}
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Bật giao diện sáng' : 'Bật giao diện tối'}
+              title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+            >
+              {theme === 'dark' ? '☀' : '☾'}
+            </button>
             <span className={`${styles.statusDot} ${health?.status === 'ready' ? styles.dotReady : styles.dotOffline}`} />
           </div>
         </header>

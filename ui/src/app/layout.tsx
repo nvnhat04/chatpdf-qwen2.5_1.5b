@@ -2,13 +2,13 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'ChatPDF - UET | Qwen2.5-1.5B',
-  description: 'Hệ thống hỏi đáp tài liệu PDF thông minh sử dụng mô hình Qwen2.5-1.5B và RAG pipeline. Được phát triển tại UET.',
-  keywords: ['chatpdf', 'qwen', 'rag', 'uet', 'pdf chatbot', 'ai'],
-  authors: [{ name: 'UET' }],
+  title: 'ChatPDF| Qwen2.5-1.5B',
+  description: 'Hệ thống hỏi đáp tài liệu PDF thông minh sử dụng mô hình và RAG pipeline. Được phát triển tại nvnhat04.',
+  keywords: ['chatpdf', 'qwen', 'rag', 'nvnhat04', 'pdf chatbot', 'ai'],
+  authors: [{ name: 'nvnhat04' }],
   openGraph: {
-    title: 'ChatPDF - UET',
-    description: 'Hỏi đáp tài liệu PDF thông minh với Qwen2.5-1.5B',
+    title: 'ChatPDF - nvnhat04',
+    description: 'Hỏi đáp tài liệu PDF thông minh',
     type: 'website',
   },
 };
